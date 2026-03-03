@@ -10,7 +10,6 @@ export default defineEventHandler(async (event) => {
     await apiFetch<null>(event, "/v1/auth/password/forgot", {
       method: "POST",
       body,
-      noAuth: true,
     });
 
     return { success: true };

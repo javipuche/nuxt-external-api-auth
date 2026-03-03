@@ -11,7 +11,6 @@ export default defineEventHandler(async (event): Promise<AuthUserResponse> => {
     const data = await apiFetch<AuthResponse>(event, "/v1/auth/sign-up", {
       method: "POST",
       body,
-      noAuth: true,
     });
 
     setTokenCookies(event, data.accessToken, data.refreshToken);

@@ -11,7 +11,6 @@ export default defineEventHandler(async (event): Promise<AuthUserResponse> => {
     const data = await apiFetch<AuthResponse>(event, "/v1/auth/sign-in", {
       method: "POST",
       body,
-      noAuth: true,
     });
 
     // Store tokens server-side — client never sees them

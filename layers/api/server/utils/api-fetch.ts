@@ -4,8 +4,6 @@ interface ApiFetchOptions {
   method?: string;
   body?: unknown;
   headers?: Record<string, string>;
-  /** Skip Bearer token injection (for public endpoints like sign-in) */
-  noAuth?: boolean;
 }
 
 /**
@@ -62,7 +60,7 @@ export async function apiFetch<T>(
   //     }
   //   }
   // }
-  if (response.status === 401 && !options.noAuth) {
+  if (response.status === 401) {
     const body = response._data as any;
     if (body?.code === "INVALID_ACCESS_TOKEN") {
       const newAccessToken = await event.context.auth.refreshAccessToken();
