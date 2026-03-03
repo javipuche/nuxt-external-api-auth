@@ -1,0 +1,60 @@
+<script setup lang="ts">
+definePageMeta({ middleware: "guest" });
+
+const email = ref("user@example.com");
+const password = ref("Password123!");
+
+const { mutate: signIn, isLoading, error } = useSignIn();
+
+function handleSubmit() {
+  signIn({ email: email.value, password: password.value });
+}
+</script>
+
+<template>
+  <div>
+    <h1>Iniciar sesion</h1>
+
+    <form @submit.prevent="handleSubmit">
+      <div>
+        <label for="email">Email</label>
+        <input
+          id="email"
+          v-model="email"
+          type="email"
+          required
+          autocomplete="email"
+          placeholder="user@example.com"
+        />
+      </div>
+
+      <div>
+        <label for="password">Password</label>
+        <input
+          id="password"
+          v-model="password"
+          type="password"
+          required
+          autocomplete="current-password"
+          placeholder="********"
+        />
+      </div>
+
+      <p v-if="error" style="color: red">
+        {{
+          (error as any)?.data?.message ||
+          error.message ||
+          "Error al iniciar sesion"
+        }}
+      </p>
+
+      <button type="submit" :disabled="isLoading">
+        {{ isLoading ? "Cargando..." : "Entrar" }}
+      </button>
+    </form>
+
+    <p>
+      <NuxtLink to="/register"> No tienes cuenta? Registrate </NuxtLink>
+    </p>
+  </div>
+</template>
