@@ -1,5 +1,3 @@
-import type { User, AuthUserResponse } from '~~/shared/types/auth'
-
 /**
  * GET /api/auth/user
  *
@@ -8,13 +6,12 @@ import type { User, AuthUserResponse } from '~~/shared/types/auth'
  */
 export default defineEventHandler(async (event): Promise<AuthUserResponse> => {
   try {
-    const data = await apiFetch<{ user: User }>(event, '/v1/auth/user')
-    return { user: data.user }
-  }
-  catch (error) {
+    const data = await apiFetch<{ user: User }>(event, "/v1/auth/user");
+    return { user: data.user };
+  } catch (error) {
     if (error instanceof ExternalApiError) {
-      throwApiError(error)
+      throwApiError(error);
     }
-    throw error
+    throw error;
   }
-})
+});

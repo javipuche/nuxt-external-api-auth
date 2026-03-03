@@ -1,5 +1,3 @@
-import type { User } from '~~/shared/types/auth'
-
 /**
  * SSR-safe reactive auth state.
  *
@@ -12,16 +10,16 @@ import type { User } from '~~/shared/types/auth'
  * across middleware, components, and Pinia Colada queries.
  */
 export function useAuthState() {
-  const user = useState<User | null>('auth:user', () => null)
+  const user = useState<User | null>("auth:user", () => null);
 
-  const isLoggedIn = computed(() => user.value !== null)
+  const isLoggedIn = computed(() => user.value !== null);
 
   function setUser(newUser: User) {
-    user.value = newUser
+    user.value = newUser;
   }
 
   function clear() {
-    user.value = null
+    user.value = null;
   }
 
   return {
@@ -33,5 +31,5 @@ export function useAuthState() {
     setUser,
     /** Clear auth state (logout) */
     clear,
-  }
+  };
 }
