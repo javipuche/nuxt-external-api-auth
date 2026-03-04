@@ -4,14 +4,14 @@ import type { H3Event } from "h3";
  * On success: updates both cookies and returns the new access token.
  * On failure: clears all cookies and returns null.
  */
-export const refreshToken = async function (
+export const refreshToken = async (
   event: H3Event,
   baseUrl: string,
-): Promise<string | null> {
-  const refreshToken = getRefreshToken(event);
+): Promise<string | null> => {
+  const refreshToken = getRefreshTokenCookie(event);
 
   if (!refreshToken) {
-    clearTokenCookies(event);
+    clearAuthCookies(event);
     return null;
   }
 
@@ -25,18 +25,15 @@ export const refreshToken = async function (
     });
 
     if (response.success) {
-      setTokenCookies(
-        event,
-        response.data.accessToken,
-        response.data.refreshToken,
-      );
-      return response.data.accessToken;
+      const { accessToken, refreshToken } = response.data;
+      setAuthCookies(event, accessToken, refreshToken);
+      return accessToken;
     }
 
-    clearTokenCookies(event);
+    clearAuthCookies(event);
     return null;
   } catch {
-    clearTokenCookies(event);
+    clearAuthCookies(event);
     return null;
   }
 };

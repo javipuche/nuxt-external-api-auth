@@ -1,4 +1,8 @@
 import type { H3Event } from "h3";
+import type {
+  ApiFetchHooks,
+  ApiFetchRequestContext,
+} from "../../shared/types/api-fetch";
 
 interface ApiFetchOptions {
   method?: string;
@@ -7,11 +11,10 @@ interface ApiFetchOptions {
 }
 
 /**
- * Authenticated fetch to the External API.
+ * Generic fetch wrapper for the External API.
  *
- * - Injects the access token from httpOnly cookies as a Bearer header
- * - On 401 + code=INVALID_ACCESS_TOKEN: transparently refreshes tokens and retries
- * - On refresh failure: clears cookies (user is logged out)
+ * - Supports extensible hooks via `event.context.apiFetchHooks` (array)
+ *   Multiple layers can push hooks — all are executed
  * - Returns the unwrapped `data` field from the API success envelope
  */
 export async function apiFetch<T>(
@@ -22,50 +25,53 @@ export async function apiFetch<T>(
   const config = useRuntimeConfig();
   const baseUrl = config.externalApiBase as string;
 
-  const makeRequest = async (token?: string) => {
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-      ...options.headers,
-    };
+  // Read ALL registered hooks (multiple layers can push)
+  const hooksList = (event.context.apiFetchHooks ?? []) as ApiFetchHooks[];
 
-    if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-    }
+  // Build the mutable request context
+  const ctx: ApiFetchRequestContext = {
+    options: {
+      method: options.method || "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+      body: options.body,
+    },
+  };
 
+  const makeRequest = async (reqCtx: ApiFetchRequestContext) => {
     return $fetch.raw(`${baseUrl}${path}`, {
-      method: (options.method || "GET") as any,
-      headers,
-      body: options.body ? JSON.stringify(options.body) : undefined,
-      ignoreResponseError: true, // We handle errors ourselves
+      method: reqCtx.options.method as any,
+      headers: reqCtx.options.headers,
+      body: reqCtx.options.body
+        ? JSON.stringify(reqCtx.options.body)
+        : undefined,
+      ignoreResponseError: true,
     });
   };
 
-  // 1. Get current access token
-  // const accessToken = options.noAuth ? undefined : getAccessToken(event);
-  const accessToken = event.context.auth.accessToken;
+  // 1. Let ALL onRequest hooks mutate the context
+  for (const hooks of hooksList) {
+    hooks.onRequest?.(ctx);
+  }
 
   // 2. Make the request
-  let response = await makeRequest(accessToken);
+  let response = await makeRequest(ctx);
 
-  // 3. If 401 with INVALID_ACCESS_TOKEN → attempt transparent refresh
-  // if (response.status === 401 && !options.noAuth) {
-  //   const body = response._data as any;
-  //   if (body?.code === "INVALID_ACCESS_TOKEN") {
-  //     // attemptTokenRefresh returns the NEW access token directly
-  //     // because getCookie() reads from the REQUEST (old cookies),
-  //     // not from the RESPONSE Set-Cookie headers we just wrote.
-  //     const newAccessToken = await attemptTokenRefresh(event, baseUrl);
-  //     if (newAccessToken) {
-  //       response = await makeRequest(newAccessToken);
-  //     }
-  //   }
-  // }
-  if (response.status === 401) {
-    const body = response._data as any;
-    if (body?.code === "INVALID_ACCESS_TOKEN") {
-      const newAccessToken = await event.context.auth.refreshAccessToken();
-      if (newAccessToken) {
-        response = await makeRequest(newAccessToken);
+  // 3. On error, give hooks a chance to handle it via retry()
+  if (!response.ok) {
+    const retry = async () => {
+      response = await makeRequest(ctx);
+    };
+
+    for (const hooks of hooksList) {
+      if (hooks.onResponseError) {
+        await hooks.onResponseError({
+          response: { status: response.status, _data: response._data },
+          options: ctx.options,
+          retry,
+        });
       }
     }
   }

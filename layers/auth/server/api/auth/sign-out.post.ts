@@ -5,22 +5,20 @@
  * Always clears cookies even if the external call fails.
  */
 export default defineEventHandler(async (event) => {
-  const refreshToken = getRefreshToken(event)
+  const refreshToken = getRefreshTokenCookie(event);
 
   try {
     if (refreshToken) {
-      await apiFetch(event, '/v1/auth/sign-out', {
-        method: 'POST',
+      await apiFetch(event, "/v1/auth/sign-out", {
+        method: "POST",
         body: { refreshToken },
-      })
+      });
     }
-  }
-  catch {
+  } catch {
     // Swallow errors — we clear cookies regardless
-  }
-  finally {
-    clearTokenCookies(event)
+  } finally {
+    clearAuthCookies(event);
   }
 
-  return { success: true }
-})
+  return { success: true };
+});

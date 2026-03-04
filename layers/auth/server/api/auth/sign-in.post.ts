@@ -14,7 +14,7 @@ export default defineEventHandler(async (event): Promise<AuthUserResponse> => {
     });
 
     // Store tokens server-side — client never sees them
-    setTokenCookies(event, data.accessToken, data.refreshToken);
+    setAuthCookies(event, data.accessToken, data.refreshToken);
 
     return { user: data.user };
   } catch (error) {
