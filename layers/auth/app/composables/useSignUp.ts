@@ -1,9 +1,4 @@
-/**
- * Pinia Colada mutation for registering a new user.
- *
- * On success: sets auth state, invalidates queries, navigates to dashboard.
- */
-export function useSignUp() {
+export const useSignUp = () => {
   const { apiFetch } = useApiFetch();
   const { setUser } = useAuthState();
   const queryCache = useQueryCache();
@@ -22,4 +17,4 @@ export function useSignUp() {
       navigateTo("/dashboard");
     },
   });
-}
+};

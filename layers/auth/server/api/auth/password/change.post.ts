@@ -1,8 +1,3 @@
-/**
- * POST /api/auth/password/change
- *
- * Changes the password for the authenticated user.
- */
 export default defineEventHandler(async (event) => {
   const body = await readBody<PasswordChangeBody>(event);
 

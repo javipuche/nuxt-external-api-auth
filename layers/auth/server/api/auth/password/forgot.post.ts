@@ -1,8 +1,3 @@
-/**
- * POST /api/auth/password/forgot
- *
- * Requests a password reset email. Public endpoint (no auth required).
- */
 export default defineEventHandler(async (event) => {
   const body = await readBody<PasswordForgotBody>(event);
 

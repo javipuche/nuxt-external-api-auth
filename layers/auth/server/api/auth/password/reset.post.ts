@@ -1,8 +1,3 @@
-/**
- * POST /api/auth/password/reset
- *
- * Resets the user password with a valid reset token. Public endpoint.
- */
 export default defineEventHandler(async (event) => {
   const body = await readBody<PasswordResetBody>(event);
 

@@ -1,7 +1,4 @@
-/**
- * Pinia Colada mutation for requesting a password reset email.
- */
-export function usePasswordForgot() {
+export const usePasswordForgot = () => {
   const { apiFetch } = useApiFetch();
 
   return useMutation({
@@ -12,4 +9,4 @@ export function usePasswordForgot() {
       });
     },
   });
-}
+};

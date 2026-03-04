@@ -1,26 +1,15 @@
-/**
- * SSR-safe reactive auth state.
- *
- * Uses Nuxt's `useState` so the value is:
- * - Populated during SSR by the auth plugin
- * - Serialized into the hydration payload
- * - Restored on the client without an extra fetch
- *
- * This is the single source of truth for "is the user logged in?"
- * across middleware, components, and Pinia Colada queries.
- */
-export function useAuthState() {
+export const useAuthState = () => {
   const user = useState<User | null>("auth:user", () => null);
 
   const isLoggedIn = computed(() => user.value !== null);
 
-  function setUser(newUser: User) {
+  const setUser = (newUser: User) => {
     user.value = newUser;
-  }
+  };
 
-  function clear() {
+  const clear = () => {
     user.value = null;
-  }
+  };
 
   return {
     /** The current user (readonly to prevent external mutation) */
@@ -32,4 +21,4 @@ export function useAuthState() {
     /** Clear auth state (logout) */
     clear,
   };
-}
+};

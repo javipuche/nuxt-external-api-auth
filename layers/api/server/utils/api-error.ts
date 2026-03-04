@@ -1,7 +1,3 @@
-/**
- * Typed error class for responses from the External API.
- * Captures the API error code, HTTP status, and field-level validation errors.
- */
 export class ExternalApiError extends Error {
   public readonly code: ApiErrorCode;
   public readonly statusCode: number;
@@ -16,11 +12,7 @@ export class ExternalApiError extends Error {
   }
 }
 
-/**
- * Convert an ExternalApiError into an h3 error so Nuxt
- * serializes it properly for the client.
- */
-export function throwApiError(error: ExternalApiError): never {
+export const throwApiError = (error: ExternalApiError): never => {
   throw createError({
     statusCode: error.statusCode,
     statusMessage: error.message,
@@ -29,4 +21,4 @@ export function throwApiError(error: ExternalApiError): never {
       errors: error.errors,
     },
   });
-}
+};

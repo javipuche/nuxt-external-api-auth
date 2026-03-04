@@ -1,9 +1,3 @@
-/**
- * POST /api/auth/sign-in
- *
- * Proxies login to the External API.
- * Stores tokens as httpOnly cookies — returns only the user to the client.
- */
 export default defineEventHandler(async (event): Promise<AuthUserResponse> => {
   const body = await readBody<SignInBody>(event);
 

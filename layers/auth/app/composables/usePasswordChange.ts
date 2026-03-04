@@ -1,7 +1,4 @@
-/**
- * Pinia Colada mutation for changing the user's password.
- */
-export function usePasswordChange() {
+export const usePasswordChange = () => {
   const { apiFetch } = useApiFetch();
 
   return useMutation({
@@ -12,4 +9,4 @@ export function usePasswordChange() {
       });
     },
   });
-}
+};

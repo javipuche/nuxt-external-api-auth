@@ -1,8 +1,4 @@
 import type { H3Event } from "h3";
-import type {
-  ApiFetchHooks,
-  ApiFetchRequestContext,
-} from "../../shared/types/api-fetch";
 
 interface ApiFetchOptions {
   method?: string;
@@ -10,25 +6,14 @@ interface ApiFetchOptions {
   headers?: Record<string, string>;
 }
 
-/**
- * Generic fetch wrapper for the External API.
- *
- * - Supports extensible hooks via `event.context.apiFetchHooks` (array)
- *   Multiple layers can push hooks — all are executed
- * - Returns the unwrapped `data` field from the API success envelope
- */
-export async function apiFetch<T>(
+export const apiFetch = async <T>(
   event: H3Event,
   path: string,
   options: ApiFetchOptions = {},
-): Promise<T> {
+): Promise<T> => {
   const config = useRuntimeConfig();
   const baseUrl = config.externalApiBase as string;
 
-  // Read ALL registered hooks (multiple layers can push)
-  const hooksList = (event.context.apiFetchHooks ?? []) as ApiFetchHooks[];
-
-  // Build the mutable request context
   const ctx: ApiFetchRequestContext = {
     options: {
       method: options.method || "GET",
@@ -52,9 +37,7 @@ export async function apiFetch<T>(
   };
 
   // 1. Let ALL onRequest hooks mutate the context
-  for (const hooks of hooksList) {
-    hooks.onRequest?.(ctx);
-  }
+  await executeOnRequestHooks(event, ctx);
 
   // 2. Make the request
   let response = await makeRequest(ctx);
@@ -65,15 +48,11 @@ export async function apiFetch<T>(
       response = await makeRequest(ctx);
     };
 
-    for (const hooks of hooksList) {
-      if (hooks.onResponseError) {
-        await hooks.onResponseError({
-          response: { status: response.status, _data: response._data },
-          options: ctx.options,
-          retry,
-        });
-      }
-    }
+    await executeOnResponseErrorHooks(event, {
+      response: { status: response.status, data: response._data },
+      options: ctx.options,
+      retry,
+    });
   }
 
   // 4. Handle error responses
@@ -91,4 +70,4 @@ export async function apiFetch<T>(
   // 5. Unwrap and return data
   const successBody = response._data as ApiSuccessResponse<T>;
   return successBody.data;
-}
+};

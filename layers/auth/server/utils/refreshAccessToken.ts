@@ -1,10 +1,6 @@
 import type { H3Event } from "h3";
-/**
- * Attempt to refresh tokens using the refresh token cookie.
- * On success: updates both cookies and returns the new access token.
- * On failure: clears all cookies and returns null.
- */
-export const refreshToken = async (
+
+export const refreshAccessToken = async (
   event: H3Event,
   baseUrl: string,
 ): Promise<string | null> => {

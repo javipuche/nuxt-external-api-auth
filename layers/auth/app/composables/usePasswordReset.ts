@@ -1,7 +1,4 @@
-/**
- * Pinia Colada mutation for resetting the password with a token.
- */
-export function usePasswordReset() {
+export const usePasswordReset = () => {
   const { apiFetch } = useApiFetch();
 
   return useMutation({
@@ -12,4 +9,4 @@ export function usePasswordReset() {
       });
     },
   });
-}
+};

@@ -1,12 +1,4 @@
-/**
- * Pinia Colada mutation for signing in.
- *
- * On success:
- * 1. Updates reactive auth state (immediate UI feedback)
- * 2. Invalidates user query (ensures fresh data if re-fetched)
- * 3. Navigates to dashboard
- */
-export function useSignIn() {
+export const useSignIn = () => {
   const { apiFetch } = useApiFetch();
   const { setUser } = useAuthState();
   const queryCache = useQueryCache();
@@ -25,4 +17,4 @@ export function useSignIn() {
       navigateTo("/dashboard");
     },
   });
-}
+};
