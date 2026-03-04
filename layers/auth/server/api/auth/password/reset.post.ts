@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     return { success: true };
   } catch (error) {
     if (error instanceof ExternalApiError) {
-      throwApiError(error);
+      throwExternalApiError(error);
     }
     throw error;
   }

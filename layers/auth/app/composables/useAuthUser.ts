@@ -1,11 +1,11 @@
 export const useAuthUser = () => {
-  const { apiFetch } = useApiFetch();
+  const { get } = useApiClient();
   const { setUser, clear, isLoggedIn } = useAuthState();
 
   const query = useQuery({
     key: AUTH_QUERY_KEYS.user(),
     query: async () => {
-      const { user } = await apiFetch<AuthUserResponse>("/api/auth/user");
+      const { user } = await get<AuthUserResponse>("/api/auth/user");
       return user;
     },
     enabled: () => isLoggedIn.value,

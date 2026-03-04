@@ -1,11 +1,10 @@
 export const usePasswordChange = () => {
-  const { apiFetch } = useApiFetch();
+  const { post } = useApiClient();
 
   return useMutation({
-    mutation: async (body: PasswordChangeBody) => {
-      await apiFetch("/api/auth/password/change", {
-        method: "POST",
-        body,
+    mutation: async (payload: PasswordChangeBody) => {
+      await post("/api/auth/password/change", {
+        payload,
       });
     },
   });

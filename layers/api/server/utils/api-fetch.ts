@@ -68,6 +68,6 @@ export const apiFetch = async <T>(
   }
 
   // 5. Unwrap and return data
-  const successBody = response._data as ApiSuccessResponse<T>;
+  const successBody = response._data as ExternalApiSuccessResponse<T>;
   return successBody.data;
 };

@@ -13,7 +13,7 @@ export const refreshAccessToken = async (
 
   try {
     const response = await $fetch<
-      ApiSuccessResponse<{ accessToken: string; refreshToken: string }>
+      ExternalApiSuccessResponse<{ accessToken: string; refreshToken: string }>
     >(`${baseUrl}/v1/auth/refresh`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

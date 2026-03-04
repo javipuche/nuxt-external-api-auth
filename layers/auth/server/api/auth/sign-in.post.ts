@@ -13,7 +13,7 @@ export default defineEventHandler(async (event): Promise<AuthUserResponse> => {
     return { user: data.user };
   } catch (error) {
     if (error instanceof ExternalApiError) {
-      throwApiError(error);
+      throwExternalApiError(error);
     }
     throw error;
   }

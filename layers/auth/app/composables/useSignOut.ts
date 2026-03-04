@@ -1,11 +1,11 @@
 export const useSignOut = () => {
-  const { apiFetch } = useApiFetch();
+  const { post } = useApiClient();
   const { clear } = useAuthState();
   const queryCache = useQueryCache();
 
   return useMutation({
     mutation: async () => {
-      await apiFetch("/api/auth/sign-out", { method: "POST" });
+      await post("/api/auth/sign-out");
     },
     onSettled() {
       clear();

@@ -1,18 +1,18 @@
 export class ExternalApiError extends Error {
-  public readonly code: ApiErrorCode;
+  public readonly code: ExternalApiErrorCode;
   public readonly statusCode: number;
   public readonly errors?: Record<string, string[]>;
 
-  constructor(statusCode: number, body: ApiErrorResponse) {
+  constructor(statusCode: number, body: ExternalApiErrorResponse) {
     super(body.message);
     this.name = "ExternalApiError";
-    this.code = body.code as ApiErrorCode;
+    this.code = body.code as ExternalApiErrorCode;
     this.statusCode = statusCode;
     this.errors = body.errors;
   }
 }
 
-export const throwApiError = (error: ExternalApiError): never => {
+export const throwExternalApiError = (error: ExternalApiError): never => {
   throw createError({
     statusCode: error.statusCode,
     statusMessage: error.message,

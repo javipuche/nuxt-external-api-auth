@@ -1,13 +1,12 @@
 export const useSignIn = () => {
-  const { apiFetch } = useApiFetch();
+  const { post } = useApiClient();
   const { setUser } = useAuthState();
   const queryCache = useQueryCache();
 
   return useMutation({
-    mutation: async (body: SignInBody) => {
-      const { user } = await apiFetch<AuthUserResponse>("/api/auth/sign-in", {
-        method: "POST",
-        body,
+    mutation: async (payload: SignInBody) => {
+      const { user } = await post<AuthUserResponse>("/api/auth/sign-in", {
+        payload,
       });
       return user;
     },
