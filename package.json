@@ -7,7 +7,8 @@
     "dev": "rm -rf .nuxt && nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck"
   },
   "dependencies": {
     "@pinia/colada": "^0.21.7",

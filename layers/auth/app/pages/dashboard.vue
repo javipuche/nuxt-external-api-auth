@@ -12,8 +12,8 @@
       </div>
     </AuthState>
 
-    <button :disabled="signOutStatus === 'pending'" @click="signOut()">
-      {{ signOutStatus === "pending" ? "Cerrando sesion..." : "Cerrar sesion" }}
+    <button :disabled="isLoading" @click="signOut()">
+      {{ isLoading ? "Cerrando sesion..." : "Cerrar sesion" }}
     </button>
 
     <hr />
@@ -27,5 +27,5 @@
 <script setup lang="ts">
 definePageMeta({ middleware: "auth" });
 
-const { mutate: signOut, status: signOutStatus } = useSignOut();
+const { mutate: signOut, isLoading } = useSignOut();
 </script>
