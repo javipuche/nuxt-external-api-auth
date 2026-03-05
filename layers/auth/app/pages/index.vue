@@ -1,27 +1,20 @@
-<script setup lang="ts">
-const { isLoggedIn } = useAuthState()
-</script>
-
 <template>
   <div>
-    <h1>OverGaming</h1>
-    <p>Bienvenido a OverGaming</p>
+    <h1>Bienvenido</h1>
 
     <nav>
       <template v-if="isLoggedIn">
-        <NuxtLink to="/dashboard">
-          Dashboard
-        </NuxtLink>
+        <NuxtLink to="/dashboard"> Dashboard </NuxtLink>
       </template>
       <template v-else>
-        <NuxtLink to="/login">
-          Iniciar sesion
-        </NuxtLink>
+        <NuxtLink to="/login"> Iniciar sesion </NuxtLink>
         &nbsp;|&nbsp;
-        <NuxtLink to="/register">
-          Registrarse
-        </NuxtLink>
+        <NuxtLink to="/register"> Registrarse </NuxtLink>
       </template>
     </nav>
   </div>
 </template>
+
+<script setup lang="ts">
+const { isLoggedIn } = useAuthState();
+</script>

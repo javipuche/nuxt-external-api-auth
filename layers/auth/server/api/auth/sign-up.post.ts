@@ -1,11 +1,16 @@
 export default defineEventHandler(async (event): Promise<AuthUserResponse> => {
+  const { externalApi } = useRuntimeConfig();
   const body = await readBody<SignUpBody>(event);
 
   try {
-    const data = await apiFetch<AuthResponse>(event, "/v1/auth/sign-up", {
-      method: "POST",
-      body,
-    });
+    const data = await apiFetch<AuthResponse>(
+      event,
+      externalApi.endpoints.auth.signUp,
+      {
+        method: "POST",
+        body,
+      },
+    );
 
     setAuthCookies(event, data.accessToken, data.refreshToken);
 

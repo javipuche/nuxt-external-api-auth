@@ -1,6 +1,5 @@
 export default defineEventHandler((event) => {
-  const config = useRuntimeConfig();
-  const baseUrl = config.externalApiBase as string;
+  const { externalApi } = useRuntimeConfig();
 
   addApiFetchHooks(event, {
     onRequest: ({ options }) => {
@@ -14,8 +13,14 @@ export default defineEventHandler((event) => {
     onResponseError: async ({ response, options, retry }) => {
       const data = response.data as any;
 
-      if (response.status === 401 && data?.code === "INVALID_ACCESS_TOKEN") {
-        const newAccessToken = await refreshAccessToken(event, baseUrl);
+      if (
+        response.status === 401 &&
+        data?.code === externalApi.errorCodes.invalidAccessToken
+      ) {
+        const newAccessToken = await refreshAccessToken(
+          event,
+          externalApi.endpoints.auth.refresh,
+        );
 
         if (newAccessToken) {
           options.headers["Authorization"] = `Bearer ${newAccessToken}`;

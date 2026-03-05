@@ -1,16 +1,3 @@
-<script setup lang="ts">
-definePageMeta({ middleware: "guest" });
-
-const email = ref("user@example.com");
-const password = ref("Password123!");
-
-const { mutate: signIn, isLoading, error } = useSignIn();
-
-function handleSubmit() {
-  signIn({ email: email.value, password: password.value });
-}
-</script>
-
 <template>
   <div>
     <h1>Iniciar sesion</h1>
@@ -58,3 +45,16 @@ function handleSubmit() {
     </p>
   </div>
 </template>
+
+<script setup lang="ts">
+definePageMeta({ middleware: "guest" });
+
+const email = ref("user@example.com");
+const password = ref("Password123!");
+
+const { mutate: signIn, isLoading, error } = useSignIn();
+
+function handleSubmit() {
+  signIn({ email: email.value, password: password.value });
+}
+</script>

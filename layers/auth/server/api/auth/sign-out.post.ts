@@ -1,9 +1,10 @@
 export default defineEventHandler(async (event) => {
+  const { externalApi } = useRuntimeConfig();
   const refreshToken = getRefreshTokenCookie(event);
 
   try {
     if (refreshToken) {
-      await apiFetch(event, "/v1/auth/sign-out", {
+      await apiFetch(event, externalApi.endpoints.auth.signOut, {
         method: "POST",
         body: { refreshToken },
       });

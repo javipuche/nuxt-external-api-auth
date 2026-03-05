@@ -1,13 +1,17 @@
 export default defineEventHandler(async (event): Promise<AuthUserResponse> => {
+  const { externalApi } = useRuntimeConfig();
   const body = await readBody<SignInBody>(event);
 
   try {
-    const data = await apiFetch<AuthResponse>(event, "/v1/auth/sign-in", {
-      method: "POST",
-      body,
-    });
+    const data = await apiFetch<AuthResponse>(
+      event,
+      externalApi.endpoints.auth.signIn,
+      {
+        method: "POST",
+        body,
+      },
+    );
 
-    // Store tokens server-side — client never sees them
     setAuthCookies(event, data.accessToken, data.refreshToken);
 
     return { user: data.user };

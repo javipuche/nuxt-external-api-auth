@@ -2,7 +2,7 @@ import type { H3Event } from "h3";
 
 export const refreshAccessToken = async (
   event: H3Event,
-  baseUrl: string,
+  endpoint: string,
 ): Promise<string | null> => {
   const refreshToken = getRefreshTokenCookie(event);
 
@@ -14,7 +14,7 @@ export const refreshAccessToken = async (
   try {
     const response = await $fetch<
       ExternalApiSuccessResponse<{ accessToken: string; refreshToken: string }>
-    >(`${baseUrl}/v1/auth/refresh`, {
+    >(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: { refreshToken },
