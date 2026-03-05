@@ -1,5 +1,12 @@
 import type { NitroFetchOptions, NitroFetchRequest } from "nitropack";
 
+declare module "nuxt/app" {
+  interface RuntimeNuxtHooks {
+    "api:response-error": (context: any) => void | Promise<void>;
+    "api:response": (context: any) => void | Promise<void>;
+  }
+}
+
 export interface ApiFetchOptions {
   method?: string;
   headers: Record<string, string>;

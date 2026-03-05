@@ -3,6 +3,7 @@ import { appendResponseHeader } from "h3";
 export const useApiClient = () => {
   const requestFetch = useRequestFetch();
   const event = useRequestEvent();
+  const nuxtApp = useNuxtApp();
 
   const _fetch = async <T>(
     url: string,
@@ -10,13 +11,17 @@ export const useApiClient = () => {
   ): Promise<T> => {
     return requestFetch(url, {
       ...options,
-      onResponse({ response }) {
-        if (event) {
-          const cookies = response.headers.getSetCookie();
-          for (const cookie of cookies) {
-            appendResponseHeader(event, "set-cookie", cookie);
-          }
+      onResponse: async (context) => {
+        const cookies = context.response.headers.getSetCookie();
+
+        for (const cookie of cookies) {
+          appendResponseHeader(event!, "set-cookie", cookie);
         }
+
+        await nuxtApp.callHook("api:response", context);
+      },
+      onResponseError: async (context) => {
+        await nuxtApp.callHook("api:response-error", context);
       },
     }) as Promise<T>;
   };
