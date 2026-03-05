@@ -4,7 +4,7 @@ export const useSignIn = () => {
   const queryCache = useQueryCache();
 
   return useMutation({
-    mutation: async (payload: SignInBody) => {
+    mutation: async (payload: SignInPayload) => {
       const { user } = await post<AuthUserResponse>("/api/auth/sign-in", {
         payload,
       });

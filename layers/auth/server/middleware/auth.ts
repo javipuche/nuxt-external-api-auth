@@ -19,7 +19,7 @@ export default defineEventHandler((event) => {
       ) {
         const newAccessToken = await refreshAccessToken(
           event,
-          externalApi.endpoints.auth.refresh,
+          `${externalApi.baseURL}${externalApi.endpoints.auth.refresh}`,
         );
 
         if (newAccessToken) {

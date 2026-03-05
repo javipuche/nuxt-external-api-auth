@@ -2,7 +2,7 @@ export default defineEventHandler(async (event): Promise<AuthUserResponse> => {
   const { externalApi } = useRuntimeConfig();
 
   try {
-    const data = await apiFetch<{ user: User }>(
+    const data = await apiFetch<{ user: UserDto }>(
       event,
       externalApi.endpoints.auth.user,
     );

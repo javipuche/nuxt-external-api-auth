@@ -1,9 +1,9 @@
 export default defineEventHandler(async (event): Promise<AuthUserResponse> => {
   const { externalApi } = useRuntimeConfig();
-  const body = await readBody<SignUpBody>(event);
+  const body = await readBody<SignUpPayloadDto>(event);
 
   try {
-    const data = await apiFetch<AuthResponse>(
+    const data = await apiFetch<AuthResponseDto>(
       event,
       externalApi.endpoints.auth.signUp,
       {
