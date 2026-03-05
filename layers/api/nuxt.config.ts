@@ -1,4 +1,8 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+
+const currentDir = dirname(fileURLToPath(import.meta.url));
+
 export default defineNuxtConfig({
   runtimeConfig: {
     externalApi: {
@@ -16,6 +20,14 @@ export default defineNuxtConfig({
         invalidAccessToken: "INVALID_ACCESS_TOKEN",
         invalidRefreshToken: "INVALID_REFRESH_TOKEN",
       },
+    },
+  },
+  imports: {
+    dirs: [join(currentDir, "./shared/types/**")],
+  },
+  nitro: {
+    imports: {
+      dirs: [join(currentDir, "./shared/types/**")],
     },
   },
 });
