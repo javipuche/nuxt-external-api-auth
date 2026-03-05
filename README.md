@@ -1,6 +1,6 @@
 # Nuxt External API Auth Boilerplate
 
-A modular Nuxt 3 starter template demonstrating a clean, decoupled architecture for authenticating with external APIs using the **BFF (Backend-For-Frontend)** pattern.
+A modular Nuxt starter template demonstrating a clean, decoupled architecture for authenticating with external APIs using the **BFF (Backend-For-Frontend)** pattern.
 
 This project showcases how to securely handle authentication, proxy requests to an external backend, and seamlessly refresh tokens, all while keeping the frontend API layer agnostic of authentication logic.
 
