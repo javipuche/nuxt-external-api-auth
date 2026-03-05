@@ -21,6 +21,9 @@
     <p>
       <NuxtLink to="/"> Volver al inicio </NuxtLink>
     </p>
+    <pre>
+      {{ authUser }}
+    </pre>
   </div>
 </template>
 
@@ -28,4 +31,5 @@
 definePageMeta({ middleware: "auth" });
 
 const { mutate: signOut, isLoading } = useSignOut();
+const authUser = useAuthUser();
 </script>
