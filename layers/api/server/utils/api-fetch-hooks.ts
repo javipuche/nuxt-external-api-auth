@@ -1,31 +1,35 @@
 import type { H3Event } from "h3";
 
-export const addApiFetchHooks = (event: H3Event, hook: ApiFetchHooks) => {
+const getApiFetchHooks = (event: H3Event) => {
   if (!event.context.apiFetchHooks) {
     event.context.apiFetchHooks = [];
   }
+  return event.context.apiFetchHooks as ApiFetchHooks[];
+};
 
-  (event.context.apiFetchHooks as ApiFetchHooks[]).push(hook);
+export const addApiFetchHooks = (event: H3Event, hook: ApiFetchHooks) => {
+  const hooks = getApiFetchHooks(event);
+  hooks.push(hook);
 };
 
 export const executeOnRequestHooks = async (
   event: H3Event,
-  context: ApiFetchRequestContext,
+  context: ApiFetchOnRequestContext,
 ) => {
-  const hooksList = (event.context.apiFetchHooks ?? []) as ApiFetchHooks[];
+  const hooks = getApiFetchHooks(event);
 
-  for (const hooks of hooksList) {
-    await hooks.onRequest?.(context);
+  for (const hook of hooks) {
+    await hook.onRequest?.(context);
   }
 };
 
 export const executeOnResponseErrorHooks = async (
   event: H3Event,
-  context: ApiFetchResponseErrorContext,
+  context: ApiFetchOnResponseErrorContext,
 ) => {
-  const hooksList = (event.context.apiFetchHooks ?? []) as ApiFetchHooks[];
+  const hooks = getApiFetchHooks(event);
 
-  for (const hooks of hooksList) {
-    await hooks.onResponseError?.(context);
+  for (const hook of hooks) {
+    await hook.onResponseError?.(context);
   }
 };

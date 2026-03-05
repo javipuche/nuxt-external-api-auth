@@ -1,14 +1,4 @@
 import { appendResponseHeader } from "h3";
-import type { FetchOptions } from "ofetch";
-
-type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-
-interface RequestOptions {
-  method?: HttpMethod;
-  payload?: FetchOptions["body"];
-  headers?: FetchOptions["headers"];
-  query?: FetchOptions["query"];
-}
 
 export const useApiClient = () => {
   const requestFetch = useRequestFetch();
@@ -16,7 +6,7 @@ export const useApiClient = () => {
 
   const _fetch = async <T>(
     url: string,
-    options?: Parameters<typeof $fetch>[1],
+    options?: ApiClientFetchOptions,
   ): Promise<T> => {
     return requestFetch(url, {
       ...options,
@@ -28,31 +18,31 @@ export const useApiClient = () => {
           }
         }
       },
-    }) as unknown as T;
+    }) as Promise<T>;
   };
 
-  const request = <T>(url: string, options: RequestOptions = {}) => {
-    const { payload, method, ...rest } = options;
+  const request = <T>(url: string, options: ApiClientRequestOptions) => {
+    const { payload, method = "GET", ...rest } = options || {};
     return _fetch<T>(url, { ...rest, method, body: payload });
   };
 
-  const get = <T>(url: string, options: RequestOptions = {}) => {
+  const get = <T>(url: string, options?: ApiClientRequestOptions) => {
     return request<T>(url, { ...options, method: "GET" });
   };
 
-  const post = <T>(url: string, options: RequestOptions = {}) => {
+  const post = <T>(url: string, options?: ApiClientRequestOptions) => {
     return request<T>(url, { ...options, method: "POST" });
   };
 
-  const put = <T>(url: string, options: RequestOptions = {}) => {
+  const put = <T>(url: string, options?: ApiClientRequestOptions) => {
     return request<T>(url, { ...options, method: "PUT" });
   };
 
-  const patch = <T>(url: string, options: RequestOptions = {}) => {
+  const patch = <T>(url: string, options?: ApiClientRequestOptions) => {
     return request<T>(url, { ...options, method: "PATCH" });
   };
 
-  const del = <T>(url: string, options: RequestOptions = {}) => {
+  const del = <T>(url: string, options?: ApiClientRequestOptions) => {
     return request<T>(url, { ...options, method: "DELETE" });
   };
 

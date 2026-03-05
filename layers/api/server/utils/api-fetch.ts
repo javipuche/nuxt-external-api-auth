@@ -1,56 +1,46 @@
 import type { H3Event } from "h3";
 
-interface ApiFetchOptions {
-  method?: string;
-  body?: unknown;
-  headers?: Record<string, string>;
-}
-
 export const apiFetch = async <T>(
   event: H3Event,
   path: string,
-  options: ApiFetchOptions = {},
+  options: Partial<ApiFetchOptions> = {},
 ): Promise<T> => {
   const config = useRuntimeConfig();
-  const baseUrl = config.externalApiBase as string;
+  const baseUrl = config.externalApi.baseURL;
 
-  const ctx: ApiFetchRequestContext = {
-    options: {
-      method: options.method || "GET",
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
-      body: options.body,
+  const defaultOptions: ApiFetchOptions = {
+    method: options.method || "GET",
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
     },
+    body: options.body,
   };
 
-  const makeRequest = async (reqCtx: ApiFetchRequestContext) => {
+  const makeRequest = async (ctx: ApiFetchOptions) => {
     return $fetch.raw(`${baseUrl}${path}`, {
-      method: reqCtx.options.method as any,
-      headers: reqCtx.options.headers,
-      body: reqCtx.options.body
-        ? JSON.stringify(reqCtx.options.body)
-        : undefined,
+      method: ctx.method as any,
+      headers: ctx.headers,
+      body: ctx.body ? JSON.stringify(ctx.body) : undefined,
       ignoreResponseError: true,
     });
   };
 
   // 1. Let ALL onRequest hooks mutate the context
-  await executeOnRequestHooks(event, ctx);
+  await executeOnRequestHooks(event, { options: defaultOptions });
 
   // 2. Make the request
-  let response = await makeRequest(ctx);
+  let response = await makeRequest(defaultOptions);
 
   // 3. On error, give hooks a chance to handle it via retry()
   if (!response.ok) {
     const retry = async () => {
-      response = await makeRequest(ctx);
+      response = await makeRequest(defaultOptions);
     };
 
     await executeOnResponseErrorHooks(event, {
       response: { status: response.status, data: response._data },
-      options: ctx.options,
+      options: defaultOptions,
       retry,
     });
   }
