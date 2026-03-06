@@ -1,4 +1,6 @@
 export default defineNuxtPlugin((nuxtApp) => {
+  const { clear } = useAuthState();
+
   nuxtApp.hook("api:response-error", async ({ response }) => {
     const data = response._data?.data || response._data;
     const status = response.status;
@@ -6,7 +8,8 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     if (status === 401 && codes.includes(data?.code)) {
       await nuxtApp.runWithContext(() => {
-        navigateTo("/login", { replace: true });
+        clear();
+        return navigateTo("/login", { replace: true });
       });
     }
   });
