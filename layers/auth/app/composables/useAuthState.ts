@@ -16,13 +16,9 @@ export const useAuthState = () => {
   };
 
   return {
-    /** The current user (readonly to prevent external mutation) */
     user: readonly(user),
-    /** Whether the user is authenticated */
     isLoggedIn,
-    /** Update the current user */
     setUser,
-    /** Clear auth state (logout) */
     clear,
   };
 };

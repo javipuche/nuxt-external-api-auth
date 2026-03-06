@@ -1,6 +1,6 @@
 import type { H3Event } from "h3";
 
-export const refreshAccessToken = async (
+const refresh = async (
   event: H3Event,
   endpoint: string,
 ): Promise<string | null> => {
@@ -32,4 +32,17 @@ export const refreshAccessToken = async (
     clearAuthCookies(event);
     return null;
   }
+};
+
+export const refreshAccessToken = (
+  event: H3Event,
+  endpoint: string,
+): Promise<string | null> => {
+  if (!event.context._refreshPromise) {
+    event.context._refreshPromise = refresh(event, endpoint).finally(() => {
+      event.context._refreshPromise = undefined;
+    });
+  }
+
+  return event.context._refreshPromise;
 };

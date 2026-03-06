@@ -1,10 +1,10 @@
 import type { H3Event } from "h3";
 
 const getApiFetchHooks = (event: H3Event) => {
-  if (!event.context.apiFetchHooks) {
-    event.context.apiFetchHooks = [];
+  if (!event.context._apiFetchHooks) {
+    event.context._apiFetchHooks = [];
   }
-  return event.context.apiFetchHooks as ApiFetchHooks[];
+  return event.context._apiFetchHooks as ApiFetchHooks[];
 };
 
 const executeOnRequestHooks = async (
