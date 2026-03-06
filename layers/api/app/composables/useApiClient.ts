@@ -1,8 +1,6 @@
 import { appendResponseHeader } from "h3";
 
-const extractErrorData = (
-  raw: unknown,
-): ExternalApiErrorData => {
+const extractErrorData = (raw: unknown): ExternalApiErrorData => {
   const obj = raw as Record<string, unknown> | null;
   const data = (obj?.data ?? obj) as ExternalApiErrorData | null;
 
@@ -25,10 +23,12 @@ export const useApiClient = () => {
     return requestFetch(url, {
       ...options,
       onResponse: async (context) => {
-        const cookies = context.response.headers.getSetCookie();
+        if (event) {
+          const cookies = context.response.headers.getSetCookie();
 
-        for (const cookie of cookies) {
-          appendResponseHeader(event!, "set-cookie", cookie);
+          for (const cookie of cookies) {
+            appendResponseHeader(event, "set-cookie", cookie);
+          }
         }
 
         await nuxtApp.callHook("api:response", {

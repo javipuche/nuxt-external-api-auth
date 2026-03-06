@@ -3,7 +3,7 @@ export default defineNuxtPlugin(async () => {
   const { get } = useApiClient();
 
   try {
-    const { user } = await get<{ user: any }>("/api/auth/user");
+    const { user } = await get<AuthUserResponse>("/api/auth/user");
     setUser(user);
   } catch {
     clear();

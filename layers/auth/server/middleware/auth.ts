@@ -11,7 +11,7 @@ export default defineEventHandler((event) => {
     },
 
     onResponseError: async ({ response, options, retry }) => {
-      const data = response.data as any;
+      const data = response.data as ExternalApiErrorResponse | undefined;
 
       if (
         response.status === 401 &&
