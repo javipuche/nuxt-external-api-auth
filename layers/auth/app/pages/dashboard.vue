@@ -5,7 +5,7 @@
     <AuthState v-slot="{ user, isLoggedIn }">
       <div v-if="isLoggedIn && user">
         <p>
-          Hola, <strong>{{ user.displayName }}</strong>
+          Hello, <strong>{{ user.displayName }}</strong>
         </p>
         <p>Email: {{ user.email }}</p>
         <p v-if="user.username">Username: @{{ user.username }}</p>
@@ -13,17 +13,14 @@
     </AuthState>
 
     <button :disabled="isLoading" @click="signOut()">
-      {{ isLoading ? "Cerrando sesion..." : "Cerrar sesion" }}
+      {{ isLoading ? "Logging out..." : "Log out" }}
     </button>
 
     <hr />
 
     <p>
-      <NuxtLink to="/"> Volver al inicio </NuxtLink>
+      <NuxtLink to="/"> Back to home </NuxtLink>
     </p>
-    <pre>
-      {{ authUser }}
-    </pre>
   </div>
 </template>
 
@@ -31,5 +28,4 @@
 definePageMeta({ middleware: "auth" });
 
 const { mutate: signOut, isLoading } = useSignOut();
-const authUser = useAuthUser();
 </script>

@@ -1,15 +1,17 @@
 <template>
   <div>
-    <h1>Bienvenido</h1>
+    <h1>Welcome</h1>
 
     <nav>
       <template v-if="isLoggedIn">
         <NuxtLink to="/dashboard"> Dashboard </NuxtLink>
+        &nbsp;|&nbsp;
+        <NuxtLink to="/user"> Fresh User Data </NuxtLink>
       </template>
       <template v-else>
-        <NuxtLink to="/login"> Iniciar sesion </NuxtLink>
+        <NuxtLink to="/login"> Login </NuxtLink>
         &nbsp;|&nbsp;
-        <NuxtLink to="/register"> Registrarse </NuxtLink>
+        <NuxtLink to="/register"> Register </NuxtLink>
       </template>
     </nav>
   </div>

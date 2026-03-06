@@ -2,11 +2,12 @@ export default defineNuxtPlugin((nuxtApp) => {
   const { clear } = useAuthState();
 
   nuxtApp.hook("api:response-error", async ({ response }) => {
-    const data = response._data?.data || response._data;
-    const status = response.status;
-    const codes = ["INVALID_ACCESS_TOKEN", "INVALID_REFRESH_TOKEN"];
+    const codes = Object.values(API_ERROR_CODES);
 
-    if (status === 401 && codes.includes(data?.code)) {
+    if (
+      response.status === 401 &&
+      (codes as string[]).includes(response.data.code)
+    ) {
       await nuxtApp.runWithContext(() => {
         clear();
         return navigateTo("/login", { replace: true });

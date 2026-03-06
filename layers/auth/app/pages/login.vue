@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Iniciar sesion</h1>
+    <h1>Login</h1>
 
     <form @submit.prevent="handleSubmit">
       <div>
@@ -29,19 +29,17 @@
 
       <p v-if="error" style="color: red">
         {{
-          (error as any)?.data?.message ||
-          error.message ||
-          "Error al iniciar sesion"
+          (error as any)?.data?.message || error.message || "Error logging in"
         }}
       </p>
 
       <button type="submit" :disabled="isLoading">
-        {{ isLoading ? "Cargando..." : "Entrar" }}
+        {{ isLoading ? "Loading..." : "Log in" }}
       </button>
     </form>
 
     <p>
-      <NuxtLink to="/register"> No tienes cuenta? Registrate </NuxtLink>
+      <NuxtLink to="/register"> Don't have an account? Register </NuxtLink>
     </p>
   </div>
 </template>

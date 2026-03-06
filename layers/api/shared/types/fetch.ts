@@ -1,9 +1,28 @@
 import type { NitroFetchOptions, NitroFetchRequest } from "nitropack";
+import type { ExternalApiErrorData } from "./envelope";
+
+export interface ApiClientResponseContext {
+  response: {
+    status: number;
+    data: unknown;
+  };
+}
+
+export interface ApiClientResponseErrorContext {
+  response: {
+    status: number;
+    data: ExternalApiErrorData;
+  };
+}
 
 declare module "nuxt/app" {
   interface RuntimeNuxtHooks {
-    "api:response-error": (context: any) => void | Promise<void>;
-    "api:response": (context: any) => void | Promise<void>;
+    "api:response-error": (
+      context: ApiClientResponseErrorContext,
+    ) => void | Promise<void>;
+    "api:response": (
+      context: ApiClientResponseContext,
+    ) => void | Promise<void>;
   }
 }
 

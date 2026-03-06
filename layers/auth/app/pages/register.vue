@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h1>Registrarse</h1>
+    <h1>Register</h1>
 
     <form @submit.prevent="handleSubmit">
       <div>
-        <label for="displayName">Nombre</label>
+        <label for="displayName">Name</label>
         <input
           id="displayName"
           v-model="displayName"
@@ -57,17 +57,17 @@
         {{
           (error as any)?.data?.message ||
           error.message ||
-          "Error al registrarse"
+          "Error registering account"
         }}
       </p>
 
       <button type="submit" :disabled="isLoading">
-        {{ isLoading ? "Cargando..." : "Crear cuenta" }}
+        {{ isLoading ? "Loading..." : "Create account" }}
       </button>
     </form>
 
     <p>
-      <NuxtLink to="/login"> Ya tienes cuenta? Inicia sesion </NuxtLink>
+      <NuxtLink to="/login"> Already have an account? Log in </NuxtLink>
     </p>
   </div>
 </template>

@@ -12,10 +12,13 @@ export interface ExternalApiErrorResponse {
   errors?: Record<string, string[]>;
 }
 
-export type ExternalApiResponse<T> =
-  | ExternalApiSuccessResponse<T>
-  | ExternalApiErrorResponse;
 
 export type ExternalApiErrorCode =
   | "INVALID_ACCESS_TOKEN"
   | "INVALID_REFRESH_TOKEN";
+
+export interface ExternalApiErrorData {
+  code: string;
+  message: string;
+  errors?: Record<string, string[]>;
+}

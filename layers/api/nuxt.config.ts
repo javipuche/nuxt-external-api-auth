@@ -16,18 +16,20 @@ export default defineNuxtConfig({
           user: "/v1/auth/user",
         },
       },
-      errorCodes: {
-        invalidAccessToken: "INVALID_ACCESS_TOKEN",
-        invalidRefreshToken: "INVALID_REFRESH_TOKEN",
-      },
     },
   },
   imports: {
-    dirs: [join(currentDir, "./shared/types/**")],
+    dirs: [
+      join(currentDir, "./shared/types/**"),
+      join(currentDir, "./shared/constants/**"),
+    ],
   },
   nitro: {
     imports: {
-      dirs: [join(currentDir, "./shared/types/**")],
+      dirs: [
+        join(currentDir, "./shared/types/**"),
+        join(currentDir, "./shared/constants/**"),
+      ],
     },
   },
 });

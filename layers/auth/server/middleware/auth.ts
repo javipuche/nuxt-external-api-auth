@@ -15,7 +15,7 @@ export default defineEventHandler((event) => {
 
       if (
         response.status === 401 &&
-        data?.code === externalApi.errorCodes.invalidAccessToken
+        data?.code === API_ERROR_CODES.INVALID_ACCESS_TOKEN
       ) {
         const newAccessToken = await refreshAccessToken(
           event,

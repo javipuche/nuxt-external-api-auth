@@ -2,23 +2,16 @@ export default defineEventHandler(async (event): Promise<AuthUserResponse> => {
   const { externalApi } = useRuntimeConfig();
   const body = await readBody<SignInPayloadDto>(event);
 
-  try {
-    const data = await apiFetch<AuthResponseDto>(
-      event,
-      externalApi.endpoints.auth.signIn,
-      {
-        method: "POST",
-        body,
-      },
-    );
+  const data = await apiFetch<AuthResponseDto>(
+    event,
+    externalApi.endpoints.auth.signIn,
+    {
+      method: "POST",
+      body,
+    },
+  );
 
-    setAuthCookies(event, data.accessToken, data.refreshToken);
+  setAuthCookies(event, data.accessToken, data.refreshToken);
 
-    return { user: data.user };
-  } catch (error) {
-    if (error instanceof ExternalApiError) {
-      throwExternalApiError(error);
-    }
-    throw error;
-  }
+  return { user: data.user };
 });
