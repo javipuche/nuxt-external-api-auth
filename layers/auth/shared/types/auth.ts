@@ -20,3 +20,28 @@ export interface SignUpPayload {
   displayName: string;
   username: string;
 }
+
+export type SignInResponse = AuthUserResponse;
+
+export type SignUpResponse = AuthUserResponse;
+
+export interface SignOutResponse {
+  success: boolean;
+}
+
+export interface ForgotPasswordPayload {
+  email: string;
+}
+
+export interface ForgotPasswordResponse {
+  success: boolean;
+}
+
+export interface ResetPasswordPayload {
+  token: string;
+  password: string;
+}
+
+export interface ResetPasswordResponse {
+  success: boolean;
+}

@@ -1,4 +1,4 @@
-export default defineEventHandler(async (event): Promise<AuthUserResponse> => {
+export default defineEventHandler(async (event): Promise<SignUpResponse> => {
   const { externalApi } = useRuntimeConfig();
   const body = await readBody<SignUpPayloadDto>(event);
 

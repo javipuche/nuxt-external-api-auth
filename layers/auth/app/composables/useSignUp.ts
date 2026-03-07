@@ -1,12 +1,10 @@
 export const useSignUp = () => {
-  const { post } = useApiClient();
+  const { signUp } = useAuthRepository();
   const { setUser } = useAuthState();
 
   return useMutation({
     mutation: async (payload: SignUpPayload) => {
-      const { user } = await post<AuthUserResponse>("/api/auth/sign-up", {
-        payload,
-      });
+      const { user } = await signUp(payload);
       return user;
     },
     onSuccess(user) {

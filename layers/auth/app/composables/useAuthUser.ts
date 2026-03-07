@@ -1,12 +1,14 @@
 export const useAuthUser = () => {
-  const { get } = useApiClient();
+  const { getAuthUser, keys } = useAuthRepository();
   const { setUser, isLoggedIn } = useAuthState();
 
   return useQuery({
-    key: AUTH_QUERY_KEYS.user(),
+    key: keys.user(),
     enabled: () => isLoggedIn.value,
+    staleTime: 1000 * 60 * 5,
+    gcTime: Infinity,
     query: async () => {
-      const { user } = await get<AuthUserResponse>("/api/auth/user");
+      const { user } = await getAuthUser();
       setUser(user);
       return user;
     },

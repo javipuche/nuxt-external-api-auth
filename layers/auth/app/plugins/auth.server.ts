@@ -1,9 +1,9 @@
 export default defineNuxtPlugin(async () => {
+  const { getAuthUser } = useAuthRepository();
   const { setUser, clear } = useAuthState();
-  const { get } = useApiClient();
 
   try {
-    const { user } = await get<AuthUserResponse>("/api/auth/user");
+    const { user } = await getAuthUser();
     setUser(user);
   } catch {
     clear();

@@ -1,10 +1,10 @@
 export const useSignOut = () => {
-  const { post } = useApiClient();
+  const { signOut } = useAuthRepository();
   const { clear } = useAuthState();
 
   return useMutation({
     mutation: async () => {
-      await post("/api/auth/sign-out");
+      await signOut();
     },
     onSettled() {
       clear();
